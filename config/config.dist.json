@@ -1,0 +1,14 @@
+{
+  "daemon": {
+    "listen": ":8080",
+    "tls": {
+      "active": false,
+      "cert": "",
+      "key": ""
+    }
+  },
+  "panel": {
+    "address": "",
+    "key": "config/panel.pem"
+  }
+}
