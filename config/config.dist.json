@@ -1,6 +1,7 @@
 {
   "daemon": {
     "listen": ":8080",
+    "root": "/home/servers",
     "tls": {
       "active": false,
       "cert": "",

@@ -15,6 +15,7 @@ type Config struct {
 
 type Daemon struct {
 	Listen string `json:"listen"`
+	Root string `json:"root"`
 	Tls struct {
 		Active bool `json:"active"`
 		Cert string `json:"cert"`

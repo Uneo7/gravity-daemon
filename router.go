@@ -10,7 +10,12 @@ func LoadRouter() (router *gin.Engine) {
 	router = gin.Default()
 
 	router.GET("/", controllers.Index)
-	router.GET("/test", middleware.GetAuth(config.Panel.PKey), controllers.Index)
 
+	api := router.Group("/api")
+
+	api.Use(middleware.GetAuth(config.Panel.PKey))
+	{
+		router.GET("/test", controllers.Index)
+	}
 	return
 }
