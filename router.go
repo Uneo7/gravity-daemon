@@ -1,9 +1,8 @@
 package main
 
 import (
-	"daemon/controllers"
-	"daemon/middleware"
 	"github.com/gin-gonic/gin"
+	"gravity-daemon/controllers"
 )
 
 func LoadRouter() (router *gin.Engine) {
@@ -13,9 +12,14 @@ func LoadRouter() (router *gin.Engine) {
 
 	api := router.Group("/api")
 
-	api.Use(middleware.GetAuth(config.Panel.PKey))
+	//api.Use(middleware.GetAuth(config.Panel.PKey))
 	{
-		router.GET("/test", controllers.Index)
+		//api.POST("/create", controllers.Create)
+
+		api.GET("/:user/server/:id/*action", controllers.ControlsGet)
+		api.POST("/:user/server/:id/*action", controllers.ControlsPost)
+
 	}
+
 	return
 }

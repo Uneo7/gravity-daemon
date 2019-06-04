@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"crypto/rsa"
@@ -10,23 +10,23 @@ import (
 
 type Config struct {
 	Daemon Daemon `json:"daemon"`
-	Panel Panel   `json:"panel"`
+	Panel  Panel  `json:"panel"`
 }
 
 type Daemon struct {
 	Listen string `json:"listen"`
-	Root string `json:"root"`
-	Tls struct {
-		Active bool `json:"active"`
-		Cert string `json:"cert"`
-		Key string `json:"key"`
+	Root   string `json:"root"`
+	Tls    struct {
+		Active bool   `json:"active"`
+		Cert   string `json:"cert"`
+		Key    string `json:"key"`
 	} `json:"tls"`
 }
 
 type Panel struct {
 	Address string `json:"address"`
-	Key string  `json:"key"`
-	PKey *rsa.PublicKey
+	Key     string `json:"key"`
+	PKey    *rsa.PublicKey
 }
 
 func LoadConfig() (config Config) {
@@ -41,7 +41,6 @@ func LoadConfig() (config Config) {
 	if err != nil {
 		log.Panic("An error as occurred while parsing config : ", err.Error())
 	}
-
 
 	pem, err := ioutil.ReadFile(config.Panel.Key)
 
