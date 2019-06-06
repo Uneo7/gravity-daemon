@@ -1,6 +1,7 @@
 package utils
 
 import (
+	Cfg "gravity-daemon/config"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,6 +13,9 @@ type Server struct {
 	Sid  string
 	Path string
 	Pid  int
+
+	Server Cfg.ServerConfig
+	Game   Cfg.GameConfig
 }
 
 func (server Server) Load(uid string, sid string) Server {
@@ -22,10 +26,19 @@ func (server Server) Load(uid string, sid string) Server {
 		return Server{}
 	}
 
+	serverConfig := Cfg.LoadServerConfig(sid)
+	gameConfig := Cfg.LoadGameConfig(serverConfig.Game.Id)
+
+	if serverConfig.Sid == "" || gameConfig.Name == "" {
+		return Server{}
+	}
+
 	return Server{
-		Uid:  uid,
-		Sid:  sid,
-		Path: path,
+		Uid:    uid,
+		Sid:    sid,
+		Path:   path,
+		Server: serverConfig,
+		Game:   gameConfig,
 	}
 }
 
@@ -52,8 +65,10 @@ func (server Server) GetPID() Server {
 
 func (server Server) Start() Server {
 
-	runString := "java -jar ./server.jar 2> >(sed 's/^/\\[Error\\] /' >&1) | tee ./output.log"
-	cmd := exec.Command("/usr/bin/tmux", "new", "-d", "-s"+server.Sid, runString)
+	logger := "|& tee output.log"
+	runString := parseStartCommand(server)
+
+	cmd := exec.Command("/usr/bin/tmux", "new", "-d", "-s"+server.Sid, runString+logger)
 	cmd.Dir = server.Path
 
 	_, err := cmd.CombinedOutput()
@@ -67,7 +82,7 @@ func (server Server) Start() Server {
 
 func (server Server) Stop() bool {
 
-	cmd := exec.Command("/usr/bin/tmux", "send-keys", "-t"+server.Sid, "stop", "ENTER")
+	cmd := exec.Command("/usr/bin/tmux", "send-keys", "-t"+server.Sid, server.Game.Commands.Stop, "ENTER")
 	cmd.Dir = server.Path
 
 	_, err := cmd.CombinedOutput()

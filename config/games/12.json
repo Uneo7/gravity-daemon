@@ -1,0 +1,25 @@
+{
+  "name": "Minecraft",
+  "commands": {
+    "start": "java -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSIncrementalPacing -XX:+AggressiveOpts -XX:SurvivorRatio=16 -Xms128M -Xmx{{memory}}M -jar {{jarfile}}",
+    "stop": "stop"
+  },
+  "logs": {
+    "eula": "You need to agree to the EULA in order to run the server\\. Go to eula\\.txt for more info\\.",
+    "started": "Done \\(.*\\)! For help, type \"help\"",
+    "location": "output.log"
+  },
+  "config": {
+    "location": "server.properties",
+    "replace": [
+      {
+        "source": "server-port=",
+        "replacement": "server-port={{server.port}}"
+      },
+      {
+        "source": "query.port=",
+        "replacement": "server-port={{server.port}}"
+      }
+    ]
+  }
+}

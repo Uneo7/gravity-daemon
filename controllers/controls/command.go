@@ -46,6 +46,6 @@ func Command(server utils.Server, c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"success": true,
-		"message": "Command sentpo",
+		"message": "Command sent",
 	})
 }

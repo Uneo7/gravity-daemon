@@ -6,7 +6,7 @@ import (
 
 func CleanupString(data string) string {
 
-	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	reg, err := regexp.Compile(`[^a-zA-Z0-9\.]+`)
 	if err != nil {
 		return ""
 	}

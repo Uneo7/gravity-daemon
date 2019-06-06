@@ -32,7 +32,7 @@ func Start(server utils.Server, c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"success": true,
-		"message": "Server started",
+		"message": "Server starting",
 		"pid":     server.Pid,
 	})
 }

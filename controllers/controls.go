@@ -49,6 +49,12 @@ func ControlsGet(c *gin.Context) {
 	case "kill":
 		controls.Kill(server, c)
 
+	case "status":
+		controls.Status(server, c)
+
+	case "console":
+		controls.Console(server, c)
+
 	default:
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -71,6 +77,12 @@ func ControlsPost(c *gin.Context) {
 	switch strings.TrimLeft(action, "/") {
 	case "command":
 		controls.Command(server, c)
+
+	case "download":
+		controls.Download(server, c)
+
+	case "delete":
+		controls.Destroy(server, c)
 
 	default:
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

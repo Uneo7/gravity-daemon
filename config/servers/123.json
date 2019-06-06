@@ -1,0 +1,25 @@
+{
+  "uid": "Uneo7",
+  "sid": "123",
+  "game": {
+    "id": "12",
+    "port": 25566,
+    "ports": [
+      25566
+    ]
+  },
+  "startup": {
+    "start": false,
+    "auto_restart": false
+  },
+  "params": [
+    {
+      "name": "jarfile",
+      "value": "server.jar"
+    },
+    {
+      "name": "memory",
+      "value": "1024"
+    }
+  ]
+}
