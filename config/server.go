@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 )
 
 type ServerConfig struct {
@@ -28,14 +29,16 @@ type ServerConfig struct {
 	} `json:"params"`
 }
 
-func LoadServerConfig(server string) (config ServerConfig) {
-	data, err := ioutil.ReadFile("./config/servers/" + server + ".json")
+func LoadServerConfig(server string) (serverConfig ServerConfig) {
+	cPath := path.Join(config.Path, server+".json")
+
+	data, err := ioutil.ReadFile(cPath)
 
 	if err != nil {
 		log.Println("An error as occurred while reading server config : ", err.Error())
 	}
 
-	err = json.Unmarshal([]byte(data), &config)
+	err = json.Unmarshal([]byte(data), &serverConfig)
 
 	if err != nil {
 		log.Println("An error as occurred while parsing server config : ", err.Error())
@@ -45,5 +48,6 @@ func LoadServerConfig(server string) (config ServerConfig) {
 }
 
 func DeleteServerConfig(server string) error {
-	return os.RemoveAll("./config/servers/" + server + ".json")
+	cPath := path.Join(config.Path, server+".json")
+	return os.RemoveAll(cPath)
 }

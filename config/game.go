@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"path"
 )
 
 type GameConfig struct {
@@ -28,14 +29,15 @@ type GameConfig struct {
 	} `json:"config"`
 }
 
-func LoadGameConfig(game string) (config GameConfig) {
-	data, err := ioutil.ReadFile("./config/games/" + game + ".json")
+func LoadGameConfig(game string) (gameConfig GameConfig) {
+	cPath := path.Join(config.Path, game+".json")
+	data, err := ioutil.ReadFile(cPath)
 
 	if err != nil {
 		log.Println("An error as occurred while reading game config : ", err.Error())
 	}
 
-	err = json.Unmarshal([]byte(data), &config)
+	err = json.Unmarshal([]byte(data), &gameConfig)
 
 	if err != nil {
 		log.Println("An error as occurred while parsing game config : ", err.Error())

@@ -6,9 +6,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
 	"log"
+	"path"
 )
 
 type Config struct {
+	Path   string
 	Daemon Daemon `json:"daemon"`
 	Panel  Panel  `json:"panel"`
 }
@@ -29,8 +31,12 @@ type Panel struct {
 	PKey    *rsa.PublicKey
 }
 
-func LoadConfig() (config Config) {
-	data, err := ioutil.ReadFile("./config/config.json")
+var config Config
+
+func LoadConfig(config *Config) {
+
+	cPath := path.Join(config.Path, "config.json")
+	data, err := ioutil.ReadFile(cPath)
 
 	if err != nil {
 		log.Panic("An error as occurred while reading config : ", err.Error())
@@ -42,7 +48,8 @@ func LoadConfig() (config Config) {
 		log.Panic("An error as occurred while parsing config : ", err.Error())
 	}
 
-	pem, err := ioutil.ReadFile(config.Panel.Key)
+	kPath := path.Join(config.Path, config.Panel.Key)
+	pem, err := ioutil.ReadFile(kPath)
 
 	if err != nil {
 		log.Panic("An error as occurred while opening JWT key file : ", err.Error())
@@ -55,6 +62,4 @@ func LoadConfig() (config Config) {
 	}
 
 	config.Panel.PKey = key
-
-	return
 }

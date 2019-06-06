@@ -2,12 +2,14 @@ package main
 
 import "C"
 import (
+	"flag"
 	"github.com/gin-gonic/gin"
 	Cfg "gravity-daemon/config"
 	"gravity-daemon/controllers"
 	"gravity-daemon/utils"
 	"log"
 	"os"
+	"path"
 )
 
 var config Cfg.Config
@@ -15,13 +17,23 @@ var router *gin.Engine
 
 func main() {
 
-	if _, err := os.Stat("./config/config.json"); os.IsNotExist(err) {
-		err = utils.Copy("./config/config.dist.json", "./config/config.json")
-		if err != nil {
-			log.Panic("An error as occurred while setping config file : ", err.Error())
-		}
+	configPath := flag.String("c", "", "Config path")
+	flag.Parse()
+
+	if *configPath == "" {
+		log.Panic("Config path not found")
 	}
-	config = Cfg.LoadConfig()
+
+	config.Path = *configPath
+	cPath := path.Join(config.Path, "config.json")
+
+	log.Println("Loading configuration from : " + cPath)
+
+	if _, err := os.Stat(cPath); os.IsNotExist(err) {
+		log.Panic("Config not found")
+	}
+
+	Cfg.LoadConfig(&config)
 
 	utils.SetConfig(config)
 	controllers.SetConfig(config)

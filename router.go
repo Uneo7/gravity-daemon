@@ -14,12 +14,11 @@ func LoadRouter() (router *gin.Engine) {
 
 	//api.Use(middleware.GetAuth(config.Panel.PKey))
 	{
-		api.POST("/server/create", controllers.ServerCreate)
-		api.POST("/user/create", controllers.UserCreate)
+		api.POST("/create/server", controllers.ServerCreate)
+		api.POST("/create/user", controllers.UserCreate)
 
-		api.GET("/:user/server/:id/*action", controllers.ControlsGet)
-		api.POST("/:user/server/:id/*action", controllers.ControlsPost)
-
+		api.GET("/user/:user/server/:id/*action", controllers.ControlsGet)
+		api.POST("/user/:user/server/:id/*action", controllers.ControlsPost)
 	}
 
 	return
