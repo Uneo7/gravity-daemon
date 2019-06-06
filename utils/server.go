@@ -18,55 +18,51 @@ type Server struct {
 	Game   Cfg.GameConfig
 }
 
-func (server Server) Load(uid string, sid string) Server {
+func (server *Server) Load(uid string, sid string) {
 
 	path := filepath.Join(config.Daemon.Root, uid, sid)
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return Server{}
+		return
 	}
 
 	serverConfig := Cfg.LoadServerConfig(sid)
 	gameConfig := Cfg.LoadGameConfig(serverConfig.Game.Id)
 
 	if serverConfig.Sid == "" || gameConfig.Name == "" {
-		return Server{}
+		return
 	}
 
-	return Server{
-		Uid:    uid,
-		Sid:    sid,
-		Path:   path,
-		Server: serverConfig,
-		Game:   gameConfig,
-	}
+	server.Uid = uid
+	server.Sid = sid
+	server.Path = path
+	server.Server = serverConfig
+	server.Game = gameConfig
 }
 
-func (server Server) GetPID() Server {
+func (server *Server) GetPID() {
 
 	cmd := exec.Command("/usr/bin/tmux", "list-panes", "-t"+server.Sid, "-F '#{pane_pid}'")
 	output, err := cmd.CombinedOutput()
 
 	if err != nil {
-		return server
+		return
 	}
 
 	spid := CleanupString(string(output))
 	pid, err := strconv.Atoi(spid)
 
 	if err != nil {
-		return server
+		return
 	}
 
 	server.Pid = pid
-
-	return server
 }
 
-func (server Server) Start() Server {
+func (server *Server) Start() bool {
 
 	logger := "|& tee output.log"
-	runString := parseStartCommand(server)
+	runString := parseStartCommand(*server)
 
 	cmd := exec.Command("/usr/bin/tmux", "new", "-d", "-s"+server.Sid, runString+logger)
 	cmd.Dir = server.Path
@@ -74,10 +70,16 @@ func (server Server) Start() Server {
 	_, err := cmd.CombinedOutput()
 
 	if err != nil {
-		return server
+		return false
 	}
 
-	return server.GetPID()
+	server.GetPID()
+
+	if server.Pid == 0 {
+		return false
+	}
+
+	return true
 }
 
 func (server Server) Stop() bool {

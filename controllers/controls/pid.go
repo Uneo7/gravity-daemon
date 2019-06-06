@@ -5,9 +5,9 @@ import (
 	"gravity-daemon/utils"
 )
 
-func Pid(server utils.Server, c *gin.Context) {
+func Pid(server *utils.Server, c *gin.Context) {
 
-	server = server.GetPID()
+	server.GetPID()
 
 	c.JSON(200, gin.H{
 		"success": true,

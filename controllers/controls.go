@@ -13,7 +13,7 @@ func getServer(c *gin.Context) (server utils.Server) {
 	sid := c.Param("id")
 	uid := c.Param("user")
 
-	server = server.Load(uid, sid)
+	server.Load(uid, sid)
 
 	if server.Sid == "" {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
@@ -44,7 +44,7 @@ func ControlsGet(c *gin.Context) {
 		controls.Stop(server, c)
 
 	case "pid":
-		controls.Pid(server, c)
+		controls.Pid(&server, c)
 
 	case "kill":
 		controls.Kill(server, c)

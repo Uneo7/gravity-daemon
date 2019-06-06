@@ -33,22 +33,22 @@ type Panel struct {
 
 var config Config
 
-func LoadConfig(config *Config) {
+func LoadConfig(c *Config) {
 
-	cPath := path.Join(config.Path, "config.json")
+	cPath := path.Join(c.Path, "config.json")
 	data, err := ioutil.ReadFile(cPath)
 
 	if err != nil {
 		log.Panic("An error as occurred while reading config : ", err.Error())
 	}
 
-	err = json.Unmarshal([]byte(data), &config)
+	err = json.Unmarshal([]byte(data), &c)
 
 	if err != nil {
 		log.Panic("An error as occurred while parsing config : ", err.Error())
 	}
 
-	kPath := path.Join(config.Path, config.Panel.Key)
+	kPath := path.Join(c.Path, c.Panel.Key)
 	pem, err := ioutil.ReadFile(kPath)
 
 	if err != nil {
@@ -61,5 +61,6 @@ func LoadConfig(config *Config) {
 		log.Panic("An error as occurred while checking JWT key file : ", err.Error())
 	}
 
-	config.Panel.PKey = key
+	c.Panel.PKey = key
+	config = *c
 }

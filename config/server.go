@@ -30,8 +30,7 @@ type ServerConfig struct {
 }
 
 func LoadServerConfig(server string) (serverConfig ServerConfig) {
-	cPath := path.Join(config.Path, server+".json")
-
+	cPath := path.Join(config.Path, "servers", server+".json")
 	data, err := ioutil.ReadFile(cPath)
 
 	if err != nil {

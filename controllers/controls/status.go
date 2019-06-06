@@ -7,7 +7,7 @@ import (
 
 func Status(server utils.Server, c *gin.Context) {
 
-	server = server.GetPID()
+	server.GetPID()
 	status := utils.ParseLog(server)
 	cpu, ram := utils.Resources(server)
 

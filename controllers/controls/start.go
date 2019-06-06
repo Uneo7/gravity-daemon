@@ -7,7 +7,7 @@ import (
 
 func Start(server utils.Server, c *gin.Context) {
 
-	server = server.GetPID()
+	server.GetPID()
 
 	if server.Pid != 0 {
 		c.JSON(200, gin.H{
@@ -19,9 +19,9 @@ func Start(server utils.Server, c *gin.Context) {
 		return
 	}
 
-	server = server.Start()
+	started := server.Start()
 
-	if server.Pid == 0 {
+	if !started {
 		c.JSON(200, gin.H{
 			"success": false,
 			"message": "Start failed (check console for more details)",

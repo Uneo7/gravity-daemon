@@ -48,7 +48,7 @@ func ParseLog(server Server) string {
 		return "eula"
 	}
 
-	server = server.GetPID()
+	server.GetPID()
 	if server.Pid == 0 {
 		return "stopped"
 	}

@@ -30,7 +30,7 @@ type GameConfig struct {
 }
 
 func LoadGameConfig(game string) (gameConfig GameConfig) {
-	cPath := path.Join(config.Path, game+".json")
+	cPath := path.Join(config.Path, "games", game+".json")
 	data, err := ioutil.ReadFile(cPath)
 
 	if err != nil {

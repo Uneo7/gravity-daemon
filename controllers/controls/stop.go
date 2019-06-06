@@ -7,7 +7,7 @@ import (
 
 func Stop(server utils.Server, c *gin.Context) {
 
-	server = server.GetPID()
+	server.GetPID()
 
 	if server.Pid == 0 {
 		c.JSON(200, gin.H{
